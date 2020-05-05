@@ -13,8 +13,10 @@ include $(STACKBUILD)/etc/CCRules.mk
 
 build:
 	mkdir $(CURDIR)/tmp/
-	rpm -i --force --noscripts --badreloc \
-		--relocate /=$(CURDIR)/tmp/ $(RPMFILE)
+	(\
+		cd $(CURDIR)/tmp/ ; \
+		rpm2cpio $(RPMFILE) | cpio --extract --unconditional --make-directories --verbose  ; \
+	)
 
 install::
 	mkdir -p $(ROOT)/$(PKGROOT)/sbin
