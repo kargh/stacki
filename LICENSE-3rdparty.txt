@@ -5,7 +5,7 @@ fbtftp         n/a       	  https://github.com/facebook/fbtftp      				 BSD
 newt           0.52.20   	  https://pagure.io/newt                  				 GPL2
 rcs            5.7       	  https://www.gnu.org/software/rcs        				 GPL2
 redis          4.0.11    	  https://redis.io                        				 BSD-ish https://raw.githubusercontent.com/antirez/redis/unstable/COPYING
-storcli        007.0409.0000.0000 https://docs.broadcom.com/docs/007.0409.0000.0000_Unified_StorCLI.txt	 https://www.broadcom.com/support/download-search/?pg=&pf=&pn=&pa=&po=&dk=storcli
+storcli        007.1316.0000.0000 https://docs.broadcom.com/docs/007.0409.0000.0000_Unified_StorCLI.txt	 https://www.broadcom.com/support/download-search/?pg=&pf=&pn=&pa=&po=&dk=storcli
 zeromq         4.2.2              http://zeromq.org/                      				 LGPL3
 
 Django         1.11.6    https://www.djangoproject.com/                     OSI Approved :: BSD License
