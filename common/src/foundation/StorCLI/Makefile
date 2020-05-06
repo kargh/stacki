@@ -14,8 +14,9 @@ include $(STACKBUILD)/etc/CCRules.mk
 build:
 	mkdir $(CURDIR)/tmp/
 	(\
+		FI=$(shell readlink -f $RPMFILE) ; \
 		cd $(CURDIR)/tmp/ ; \
-		rpm2cpio $(RPMFILE) | cpio --extract --unconditional --make-directories --verbose  ; \
+		rpm2cpio $(FI) | cpio --extract --unconditional --make-directories --verbose  ; \
 	)
 
 install::
