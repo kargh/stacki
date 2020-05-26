@@ -73,6 +73,7 @@ class Command(command):
 	<related>create pallet</related>
 	"""
 
+	@stack.commands.Command.rewrite_frontend_repo_file
 	def run(self, params, args):
 		if len(args) < 1:
 			raise ArgRequired(self, 'pallet')
@@ -83,22 +84,12 @@ class Command(command):
 
 		self.beginOutput()
 
-		regenerate = False
 		for pallet in self.get_pallets(args, params):
 			# Run any hooks before we regenerate the repo file and remove the pallet.
 			if run_hooks:
 				self.run_pallet_hooks(operation="remove", pallet_info=pallet)
 
 			self.clean_pallet(pallet)
-			regenerate = True
-
-		# Regenerate the stacki.repo if needed
-		if regenerate:
-			self._exec("""
-				/opt/stack/bin/stack report host repo localhost |
-				/opt/stack/bin/stack report script |
-				/bin/sh
-			""", shell=True)
 
 		self.endOutput(padChar='')
 

@@ -28,6 +28,7 @@ class Command(
 	</example>
 	"""
 
+	@stack.commands.Command.rewrite_frontend_repo_file
 	def run(self, params, args):
 		if not len(args):
 			raise CommandError(self, 'One or more repos must be specified')

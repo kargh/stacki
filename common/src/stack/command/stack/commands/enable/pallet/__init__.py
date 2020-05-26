@@ -11,7 +11,6 @@
 # @rocks@
 
 
-import os
 import stack.commands
 from stack.argument_processors.pallet import PalletArgProcessor
 from stack.exception import ArgRequired, CommandError
@@ -71,6 +70,7 @@ class Command(PalletArgProcessor, stack.commands.enable.command):
 	<related>create pallet</related>
 	"""
 
+	@stack.commands.Command.rewrite_frontend_repo_file
 	def run(self, params, args):
 		if len(args) < 1:
 			raise ArgRequired(self, 'pallet')
@@ -113,13 +113,6 @@ class Command(PalletArgProcessor, stack.commands.enable.command):
 					'insert into stacks(box, roll) values (%s, %s)',
 					(box_id, pallet.id)
 				)
-
-		# Regenerate stacki.repo
-		self._exec("""
-			/opt/stack/bin/stack report host repo localhost |
-			/opt/stack/bin/stack report script |
-			/bin/sh
-			""", shell=True)
 
 		# Now that the repo info is regenerated, run any hooks.
 		if run_hooks:

@@ -627,6 +627,25 @@ class DatabaseConnection:
 				return environment
 		return None
 
+	def getHostBox(self, host):
+		"""
+		Returns the box for a given host.
+		"""
+
+		host = self.getHostname(host)
+
+		result = self.select("""boxes.name
+			FROM boxes, nodes
+			WHERE boxes.id=nodes.box
+			AND nodes.name=%s
+			""",
+			host)
+
+		if not result:
+			return None
+
+		return result[0][0]
+
 	def getNodeName(self, hostname, subnet=None):
 		if not subnet:
 			lookup = self._lookup_hostname(hostname)
@@ -1328,23 +1347,25 @@ class Command:
 		return None
 
 
-	def reportFile(self, file, contents, *, perms=None, host=None):
-		if file[0] == os.sep:
-			file = file[1:]
-		attr = '_'.join(os.path.split(file))
+	def rewrite_frontend_repo_file(stack_run_method):
+		@wraps(stack_run_method)
+		def wrapper(*args, **kwargs):
+			stack = args[0]
+			original_box_data = stack.call('list.box', [stack.db.getHostBox('localhost')])
+			stack_run_method(*args, **kwargs)
+			new_box_data = stack.call('list.box', [stack.db.getHostBox('localhost')])
+			if original_box_data != new_box_data:
+				stack.deferred.callback(stack.rewriteFrontendRepofile)
+		return wrapper
 
-		if host:
-			override = self.getHostAttr(host, attr)
-		else:
-			override = self.getAttr(attr)
-		if override is not None:
-			contents = override
 
-		text = []
-		text.append('<stack:file stack:name="/etc/resolv.conf">')
-		text.append(contents)
-		text.append('</stack:file>')
-		return '\n'.join(text)
+	def rewriteFrontendRepofile(self):
+		''' re-write the stacki.repo file '''
+		self._exec("""
+			/opt/stack/bin/stack report host repo localhost |
+			/opt/stack/bin/stack report script |
+			/bin/sh
+			""", shell=True)
 
 	def beginOutput(self):
 		"""
