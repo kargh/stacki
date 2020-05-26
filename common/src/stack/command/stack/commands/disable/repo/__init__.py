@@ -7,6 +7,7 @@
 from stack.argument_processors.box import BoxArgProcessor
 from stack.argument_processors.repo import RepoArgProcessor
 import stack.commands
+import stack.deferable
 from stack.exception import CommandError
 
 
@@ -33,7 +34,7 @@ class Command(BoxArgProcessor, RepoArgProcessor, stack.commands.disable.command)
 	<related>list repo</related>
 	"""
 
-	@stack.commands.Command.rewrite_frontend_repo_file
+	@stack.deferable.rewrite_frontend_repo_file
 	def run(self, params, args):
 		if not len(args):
 			raise CommandError(self, 'One or more repos must be specified')

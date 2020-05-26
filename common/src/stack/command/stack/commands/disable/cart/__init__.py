@@ -6,6 +6,7 @@
 
 from stack.argument_processors.cart import CartArgProcessor
 import stack.commands
+import stack.deferable
 from stack.exception import ArgRequired, CommandError
 
 
@@ -33,7 +34,7 @@ class Command(CartArgProcessor, stack.commands.disable.command):
 	<related>list cart</related>
 	"""
 
-	@stack.commands.Command.rewrite_frontend_repo_file
+	@stack.deferable.rewrite_frontend_repo_file
 	def run(self, params, args):
 		if len(args) < 1:
 			raise ArgRequired(self, 'cart')

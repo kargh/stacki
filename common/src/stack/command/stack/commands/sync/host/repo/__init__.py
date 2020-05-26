@@ -10,7 +10,7 @@ import sys
 import stack.commands
 from stack.commands.sync.host import Parallel
 from stack.commands.sync.host import timeout
-
+from stack.repo import rewrite_repofile
 
 class Command(stack.commands.sync.host.command):
 	"""
@@ -45,7 +45,7 @@ class Command(stack.commands.sync.host.command):
 
 		# if we're only syncing localhost, just do that and don't mess with the other stuff
 		if hosts == [me]:
-			self.rewriteFrontendRepofile()
+			rewrite_repofile()
 			return
 
 		threads = []

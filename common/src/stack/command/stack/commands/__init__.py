@@ -26,7 +26,6 @@ import sys
 import syslog
 import threading
 import time
-from functools import wraps
 from collections import namedtuple
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import ExitStack
@@ -1345,27 +1344,6 @@ class Command:
 			return b''.join(self.bytes)
 
 		return None
-
-
-	def rewrite_frontend_repo_file(stack_run_method):
-		@wraps(stack_run_method)
-		def wrapper(*args, **kwargs):
-			stack = args[0]
-			original_box_data = stack.call('list.box', [stack.db.getHostBox('localhost')])
-			stack_run_method(*args, **kwargs)
-			new_box_data = stack.call('list.box', [stack.db.getHostBox('localhost')])
-			if original_box_data != new_box_data:
-				stack.deferred.callback(stack.rewriteFrontendRepofile)
-		return wrapper
-
-
-	def rewriteFrontendRepofile(self):
-		''' re-write the stacki.repo file '''
-		self._exec("""
-			/opt/stack/bin/stack report host repo localhost |
-			/opt/stack/bin/stack report script |
-			/bin/sh
-			""", shell=True)
 
 	def beginOutput(self):
 		"""

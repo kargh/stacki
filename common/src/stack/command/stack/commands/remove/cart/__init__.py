@@ -8,6 +8,7 @@
 
 from stack.argument_processors.cart import CartArgProcessor
 import stack.commands
+import stack.deferable
 from stack.exception import ArgRequired
 
 
@@ -29,7 +30,7 @@ class Command(CartArgProcessor, stack.commands.remove.command):
 	<related>list cart</related>
 	"""		
 
-	@stack.commands.Command.rewrite_frontend_repo_file
+	@stack.deferable.rewrite_frontend_repo_file
 	def run(self, params, args):
 		if not len(args):
 			raise ArgRequired(self, 'cart')

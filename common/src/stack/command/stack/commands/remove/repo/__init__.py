@@ -1,5 +1,6 @@
 from stack.argument_processors.repo import RepoArgProcessor
 import stack.commands
+import stack.deferable
 from stack.exception import CommandError
 
 
@@ -16,7 +17,7 @@ class Command(RepoArgProcessor, stack.commands.remove.command):
 	</example>
 	"""
 
-	@stack.commands.Command.rewrite_frontend_repo_file
+	@stack.deferable.rewrite_frontend_repo_file
 	def run(self, params, args):
 		if not args:
 			raise CommandError(self, 'either a repo name or alias must be specified.')

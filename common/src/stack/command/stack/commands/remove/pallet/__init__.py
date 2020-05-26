@@ -19,6 +19,7 @@ import pathlib
 import shutil
 
 import stack.commands
+import stack.deferable
 from stack.argument_processors.pallet import PalletArgProcessor
 from stack.exception import ArgRequired
 
@@ -73,7 +74,7 @@ class Command(command):
 	<related>create pallet</related>
 	"""
 
-	@stack.commands.Command.rewrite_frontend_repo_file
+	@stack.deferable.rewrite_frontend_repo_file
 	def run(self, params, args):
 		if len(args) < 1:
 			raise ArgRequired(self, 'pallet')
