@@ -13,8 +13,6 @@
 # @rocks@
 
 import atexit
-import os
-import pwd
 import pymysql
 import sys
 import syslog
@@ -31,6 +29,9 @@ def sigint_handler(signal, frame):
 	sys.exit(0)
 
 def db_closer(db_handle):
+	# dbhandle can be None during frontend install (the CLI bootstrap) and that's ok
+	if db_handle is None:
+		return
 	try:
 		db_handle.close()
 	except pymysql.err.Error:
